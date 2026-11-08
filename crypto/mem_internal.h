@@ -233,6 +233,10 @@ class Array {
 
   void Reset() { Reset(nullptr, 0); }
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif  // __GNUC__
   // Reset releases the current contents of the array and takes ownership of the
   // raw pointer supplied by the caller.
   void Reset(T *new_data, size_t new_size) {
@@ -241,6 +245,9 @@ class Array {
     data_ = new_data;
     size_ = new_size;
   }
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif  // __GNUC__
 
   // Release releases ownership of the array to a raw pointer supplied by the
   // caller.
@@ -377,6 +384,10 @@ class Vector {
   T *end() { return data_ + size_; }
   const T *end() const { return data_ + size_; }
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif  // __GNUC__
   void clear() {
     std::destroy_n(data_, size_);
     OPENSSL_free(data_);
@@ -384,6 +395,9 @@ class Vector {
     size_ = 0;
     capacity_ = 0;
   }
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif  // __GNUC__
 
   void pop_back() {
     BSSL_CHECK(size_ != 0);
